@@ -1,7 +1,12 @@
 #  coding: utf-8 
 import SocketServer
 import os
+import os.path
 import StringIO
+import requests
+
+#From stackoverflow citied
+from os.path import exists
 
 # Copyright 2013 Abram Hindle, Eddie Antonio Santos
 # 
@@ -39,25 +44,44 @@ class MyWebServer(SocketServer.BaseRequestHandler):
         inputdata = StringIO.StringIO(self.data)
         line1 = inputdata.readline()
         
+        #Print test
         print("line1 --> " + line1)
       	#self.request.sendall(line1)
       	split_line = line1.split()
       	
+      	#Http command
       	command = split_line[0]
+      	#Print test
       	print("command --> " + command)
       	
+      	#Http URI
       	base = split_line[1]
+      	#Print test
       	print("base --> " + base)
       	
       	#self.request.sendall(line2[0])
       	
-        
-        #Beta Server
-        #user_request = self.data
-        #print ("This is user request: " + user_request)
-        
-        #if 'HTTP' in user_request:
-        #	print ("We found html")
+      	#Format user path
+      	user_path = ("'~/workspace/www" + base +"'")
+      	print("user path --> " + user_path)
+      	user_path = user_path.strip()
+      	print("Stripped user_path --> " + user_path)
+      	print (os.path.exists(user_path))
+      	
+      	#Determines if file is in www
+      	#Not Working yet
+      	if os.path.exists(user_path) == True:
+      	    print("access GRANTED")
+      	elif os.path.exists(user_path) == False:
+      	    print("access DENIED")
+      	    
+      	#Handle requests
+      	response = requests.post(user_path)
+      	
+      	print ("This is response status: " + response.status_code)
+      	
+      	    
+
         
 
 if __name__ == "__main__":
