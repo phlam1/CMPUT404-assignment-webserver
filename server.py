@@ -43,6 +43,12 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	#self.request.sendall(line1)
       	split_line = line1.split()
       	
+      	command = split_line[0]
+      	print("command --> " + command)
+      	
+      	base = split_line[1]
+      	print("base --> " + base)
+      	
       	#self.request.sendall(line2[0])
       	
         

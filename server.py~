@@ -35,11 +35,15 @@ class MyWebServer(SocketServer.BaseRequestHandler):
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\n" % self.data)
         
+        #Takes first line of data
         inputdata = StringIO.StringIO(self.data)
         line1 = inputdata.readline()
-      	self.request.sendall(line1)
-      	line2 = line1.split()
-      	self.request.sendall(line2[0])
+        
+        print("line1 --> " + line1)
+      	#self.request.sendall(line1)
+      	split_line = line1.split()
+      	
+      	#self.request.sendall(line2[0])
       	
         
         #Beta Server
