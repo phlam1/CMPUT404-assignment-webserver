@@ -46,7 +46,8 @@ class MyWebServer(SocketServer.BaseRequestHandler):
         
         #Print test
         print("line1 --> " + line1)
-      	#self.request.sendall(line1)
+        self.request.sendall("ok\n")
+      	self.request.sendall("first line of request --> " + line1 + "\n")
       	split_line = line1.split()
       	
       	#Http command
@@ -62,23 +63,37 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	#self.request.sendall(line2[0])
       	
       	#Format user path
-      	user_path = ("'~/workspace/www" + base +"'")
+      	#user_path = ("https://127.0.0.1:8080/www" + base)
+      	user_path = ("127.0.0.1:8080/www" + base)
       	print("user path --> " + user_path)
       	user_path = user_path.strip()
       	print("Stripped user_path --> " + user_path)
-      	print (os.path.exists(user_path))
+      	print(os.path.exists(user_path))
+      	
+      	#test
+      	self.request.sendall("user path --> " + user_path + "\n")
+      	response = requests.post(user_path)
+      	self.request.sendall(response)
       	
       	#Determines if file is in www
       	#Not Working yet
-      	if os.path.exists(user_path) == True:
+      	if os.path.isfile(user_path) == True:
       	    print("access GRANTED")
-      	elif os.path.exists(user_path) == False:
+      	    #Handle requests
+      	    response = requests.post(user_path)
+      	    self.request.sendall("This is response status: " + response.status_code)
+      	
+      	    
+      	    #test
+      	    self.request.sendall("access GRANTED\n")
+      	elif os.path.isfile(user_path) == False:
       	    print("access DENIED")
       	    
-      	#Handle requests
-      	response = requests.post(user_path)
-      	
-      	print ("This is response status: " + response.status_code)
+      	    #test
+      	    self.request.sendall("access DENIED\n")
+      	    #Handle requests
+      	    response = requests.post(user_path)
+      	    self.requst.sendall("This is response status: " + response.status_code)
       	
       	    
 
