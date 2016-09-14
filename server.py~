@@ -46,8 +46,8 @@ class MyWebServer(SocketServer.BaseRequestHandler):
         
         #Print test
         print("line1 --> " + line1)
-        self.request.sendall("ok\n")
-      	self.request.sendall("first line of request --> " + line1 + "\n")
+        #self.request.sendall("ok\n")
+      	#self.request.sendall("first line of request --> " + line1 + "\n")
       	split_line = line1.split()
       	
       	#Http command
@@ -63,37 +63,51 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	#self.request.sendall(line2[0])
       	
       	#Format user path
-      	#user_path = ("https://127.0.0.1:8080/www" + base)
-      	user_path = ("127.0.0.1:8080/www" + base)
+      	user_path = ("www" + base)
       	print("user path --> " + user_path)
       	user_path = user_path.strip()
       	print("Stripped user_path --> " + user_path)
       	print(os.path.exists(user_path))
       	
       	#test
-      	self.request.sendall("user path --> " + user_path + "\n")
-      	response = requests.post(user_path
+      	#self.request.sendall("user path --> " + user_path + "\n")
       	
       	#Determines if file is in www
       	#Not Working yet
-      	if os.path.isfile(user_path) == True:
+      	
+      	
+      	
+      	if os.path.exists(user_path) == True:
+      	    #test
+      	    #self.request.sendall("access GRANTED\n")
       	    print("access GRANTED")
       	    #Handle requests
-      	    response = requests.post(user_path)
-      	    self.request.sendall("This is response status: " + response.status_code)
-      	
+
       	    
-      	    #test
-      	    self.request.sendall("access GRANTED\n")
-      	elif os.path.isfile(user_path) == False:
+      	    if (".html" in user_path):
+      	    	openfile = open(user_path, "r")
+      	    	file_information = openfile.read()
+      	    	#Code from citied stackoverflow url
+      	    	# Establish connection with client.    
+      	    	self.request.send('HTTP/1.1 200 OK\r\n')
+      	    	self.request.send('Content-Type: text/html\r\n\r\n')
+      	    	self.request.send(file_information)
+      	    
+      	    if (".css" in user_path):
+      	    	openfile = open(user_path, "r")
+      	    	file_information = openfile.read()
+      	    	self.request.send('HTTP/1.1 200 OK\r\n')
+      	    	self.request.send('Content-Type: text/css\r\n\r\n')
+      	    	self.request.send(file_information)
+      	    
+      	elif os.path.exists(user_path) == False:
       	    print("access DENIED")
+      	    #self.request.send('HTTP/1.1 404 NOTOK
+      	    #self.request.send(
       	    
       	    #test
       	    self.request.sendall("access DENIED\n")
-      	    #Handle requests
-      	    response = requests.post(user_path)
-      	    self.requst.sendall("This is response status: " + response.status_code)
-      	
+
       	    
 
         
