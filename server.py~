@@ -82,7 +82,13 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	    #self.request.sendall("access GRANTED\n")
       	    print("access GRANTED")
       	    #Handle requests
-
+      	    
+      	    if (base == "/"):
+      	    	openfile = open("www/index.html", "r")
+      	    	file_information = openfile.read()
+      	    	self.request.send('HTTP/1.1 200 OK\r\n')
+      	    	self.request.send('Content-Type: text/html\r\n\r\n')
+      	    	self.request.send(file_information)
       	    
       	    if (".html" in user_path):
       	    	openfile = open(user_path, "r")
@@ -99,14 +105,25 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	    	self.request.send('HTTP/1.1 200 OK\r\n')
       	    	self.request.send('Content-Type: text/css\r\n\r\n')
       	    	self.request.send(file_information)
+      	    	
+      	    if (base == "/deep/"):
+      	    	user_path = user_path + "index.html"
+      	    	openfile = open(user_path, "r")
+      	    	file_information = openfile.read()
+      	    	self.request.send('HTTP/1.1 200 OK\r\n')
+      	    	self.request.send('Content-Type: text/html\r\n\r\n')
+      	    	self.request.send(file_information)
+      	    
+      	    if (base == "/deep"):
+      	    	self.request.send('HTTP/1.1 301 Redirect')
+      	    	self.request.send(
       	    
       	elif os.path.exists(user_path) == False:
       	    print("access DENIED")
-      	    #self.request.send('HTTP/1.1 404 NOTOK
-      	    #self.request.send(
+      	    self.request.send('HTTP/1.1 404 Not found\r\n')
       	    
       	    #test
-      	    self.request.sendall("access DENIED\n")
+      	    #self.request.sendall("access DENIED\n")
 
       	    
 
