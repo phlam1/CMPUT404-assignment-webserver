@@ -3,7 +3,6 @@ import SocketServer
 import os
 import os.path
 import StringIO
-import requests
 from os.path import exists
 
 
@@ -85,9 +84,6 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 	    #Within WWW directory and end in /
       	    elif base.endswith("/"):
       	    	user_path = user_path + "index.html"
-      	    	print("base --> " + base)
-      	    	print("User_path --> " + user_path)
-      	    	
 	      	openfile = open(user_path)
 	      	file_information = openfile.read()
 	      	self.request.send('HTTP/1.1 200 OK\r\n')
@@ -99,9 +95,6 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	    
 	      	    
       	else: #os.path.exists(user_path) == False:
-      		print("error user_path " + user_path)
-      		print (os.path.exists(user_path))
-      		print("access hey")
       		self.request.send('HTTP/1.1 404 Not found\r\n')
       		self.request.send('Content-Type: plain/text\r\n\r\n')
 
