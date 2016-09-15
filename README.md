@@ -40,3 +40,11 @@ Author: Thane Brimhall
 Publisher: 2016 Stack Exchange Inc
 
 http://www.tutorialspoint.com/python/python_files_io.htm
+
+Collaborated
+=============
+Philip Lam (phlam1 1304150)
+Mate Verunica (verunica 1291589)
+
+
+

@@ -92,7 +92,7 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 	    
 	    else:
       		self.request.send('HTTP/1.1 404 Not found\r\n')
-      	    
+      	          		self.request.send('Content-Type: plain/text\r\n\r\n')
 	      	    
       	else: #os.path.exists(user_path) == False:
       		self.request.send('HTTP/1.1 404 Not found\r\n')
