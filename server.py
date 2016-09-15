@@ -6,6 +6,7 @@ import StringIO
 import requests
 from os.path import exists
 
+
 # Copyright 2013 Abram Hindle, Eddie Antonio Santos
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,7 +62,7 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	    if (base == "/"):
       	    	openfile = open("www/index.html", "r")
       	    	file_information = openfile.read()
-      	    	self.request.send('HTTP/1.1 301 redirect OK\r\n')
+      	    	self.request.send('HTTP/1.1 200 OK\r\n')
       	    	self.request.send('Content-Type: text/html\r\n\r\n')
       	    	self.request.send(file_information)
       	    
@@ -81,31 +82,20 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	    	self.request.send('Content-Type: text/css\r\n\r\n')
       	    	self.request.send(file_information)
       	    	
-	    #Within WWW and not any of the above
-      	    else:
+	    #Within WWW directory and end in /
+      	    elif base.endswith("/"):
       	    	user_path = user_path + "index.html"
       	    	print("base --> " + base)
       	    	print("User_path --> " + user_path)
       	    	
-      	    	#Handles folder without "/"
-      	    	if os.path.exists(user_path) == False:
-      	    		redirect_user_path ="www" + base + "/index.html"
-      	    		user_path = redirect_user_path
-      	    		print("redirect user path --> " + redirect_user_path)
-      	    		openfile = open(redirect_user_path, "r")
-      	    		file_information = openfile.read()
-      	    		self.request.send('HTTP/1.1 301 Redirect OK\r\n')
-      	    		self.request.send('Content-Type: text/html\r\n\r\n')
-      	    		self.request.send(file_information)
-      	    		print("user path --> " + user_path)
-      	    		print(os.path.exists(user_path))
-      	    	#Handles folder with "/"
-      	    	else:
-	      	    	openfile = open(user_path)
-	      	    	file_information = openfile.read()
-	      	    	self.request.send('HTTP/1.1 301 Redirect OK\r\n')
-	      	    	self.request.send('Content-Type: text/html\r\n\r\n')
-	      	    	self.request.send(file_information)
+	      	openfile = open(user_path)
+	      	file_information = openfile.read()
+	      	self.request.send('HTTP/1.1 200 OK\r\n')
+	      	self.request.send('Content-Type: text/html\r\n\r\n')
+	      	self.request.send(file_information)
+	    
+	    else:
+      		self.request.send('HTTP/1.1 404 Not found\r\n')
       	    
 	      	    
       	else: #os.path.exists(user_path) == False:
@@ -113,7 +103,7 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       		print (os.path.exists(user_path))
       		print("access hey")
       		self.request.send('HTTP/1.1 404 Not found\r\n')
-      	    
+      		self.request.send('Content-Type: plain/text\r\n\r\n')
 
 
 if __name__ == "__main__":
