@@ -39,7 +39,10 @@ Name: Python path.exists() returning False
 Author: Thane Brimhall
 Publisher: 2016 Stack Exchange Inc
 
-http://www.tutorialspoint.com/python/python_files_io.htm
+URL: http://www.tutorialspoint.com/python/python_files_io.htm
+Name: Python files I/O
+Author: unknown
+Publisher: 2016 tutorialspoint
 
 Collaborated
 =============
