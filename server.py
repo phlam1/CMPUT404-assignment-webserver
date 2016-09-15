@@ -4,8 +4,6 @@ import os
 import os.path
 import StringIO
 import requests
-
-#From stackoverflow citied
 from os.path import exists
 
 # Copyright 2013 Abram Hindle, Eddie Antonio Santos
@@ -44,61 +42,38 @@ class MyWebServer(SocketServer.BaseRequestHandler):
         inputdata = StringIO.StringIO(self.data)
         line1 = inputdata.readline()
         
-        #Print test
-        print("line1 --> " + line1)
-        #self.request.sendall("ok\n")
-      	#self.request.sendall("first line of request --> " + line1 + "\n")
+ 	#Split up the first line of the request
       	split_line = line1.split()
       	
       	#Http command
       	command = split_line[0]
-      	#Print test
-      	print("command --> " + command)
       	
-      	#Http URI
+      	#Http resource
       	base = split_line[1]
-      	#Print test
-      	print("base --> " + base)
       	
-      	#self.request.sendall(line2[0])
-      	
-      	#Format user path
+      	#Format user path and removes newline
       	user_path = ("www" + base)
-      	print("user path --> " + user_path)
       	user_path = user_path.strip()
-      	print("Stripped user_path --> " + user_path)
-      	print(os.path.exists(user_path))
-      	
-      	#test
-      	#self.request.sendall("user path --> " + user_path + "\n")
-      	
-      	#Determines if file is in www
-      	#Not Working yet
-      	
-      	
-      	
+	      	
       	if os.path.exists(user_path) == True:
-      	    #test
-      	    #self.request.sendall("access GRANTED\n")
-      	    print("access GRANTED")
-      	    #Handle requests
       	    
+	    #Handles server ip redirect
       	    if (base == "/"):
       	    	openfile = open("www/index.html", "r")
       	    	file_information = openfile.read()
-      	    	self.request.send('HTTP/1.1 200 OK\r\n')
+      	    	self.request.send('HTTP/1.1 301 redirect OK\r\n')
       	    	self.request.send('Content-Type: text/html\r\n\r\n')
       	    	self.request.send(file_information)
       	    
+	    #Handles any HTML
       	    if (".html" in user_path):
       	    	openfile = open(user_path, "r")
-      	    	file_information = openfile.read()
-      	    	#Code from citied stackoverflow url
-      	    	# Establish connection with client.    
+      	    	file_information = openfile.read()    
       	    	self.request.send('HTTP/1.1 200 OK\r\n')
       	    	self.request.send('Content-Type: text/html\r\n\r\n')
       	    	self.request.send(file_information)
       	    
+	    #Handles any CSS
       	    if (".css" in user_path):
       	    	openfile = open(user_path, "r")
       	    	file_information = openfile.read()
@@ -106,28 +81,21 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	    	self.request.send('Content-Type: text/css\r\n\r\n')
       	    	self.request.send(file_information)
       	    	
-      	    if (base == "/deep/"):
+	    #Within WWW and not any of the above
+      	    else:
       	    	user_path = user_path + "index.html"
       	    	openfile = open(user_path, "r")
       	    	file_information = openfile.read()
-      	    	self.request.send('HTTP/1.1 200 OK\r\n')
+      	    	self.request.send('HTTP/1.1 301 Redirect OK\r\n')
       	    	self.request.send('Content-Type: text/html\r\n\r\n')
       	    	self.request.send(file_information)
       	    
-      	    if (base == "/deep"):
-      	    	self.request.send('HTTP/1.1 301 Redirect')
-      	    	self.request.send(
-      	    
+	      	    
       	elif os.path.exists(user_path) == False:
       	    print("access DENIED")
       	    self.request.send('HTTP/1.1 404 Not found\r\n')
       	    
-      	    #test
-      	    #self.request.sendall("access DENIED\n")
 
-      	    
-
-        
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080
