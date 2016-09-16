@@ -45,9 +45,6 @@ class MyWebServer(SocketServer.BaseRequestHandler):
  	#Split up the first line of the request
       	split_line = line1.split()
       	
-      	#Http command
-      	command = split_line[0]
-      	
       	#Http resource
       	base = split_line[1]
       	
@@ -78,7 +75,7 @@ class MyWebServer(SocketServer.BaseRequestHandler):
       	    	openfile = open(user_path, "r")
       	    	file_information = openfile.read()
       	    	self.request.send('HTTP/1.1 200 OK\r\n')
-      	    	self.request.send('Content-Type: text/css\r\n\r\n')
+         	self.request.send('Content-Type: text/css\r\n\r\n')
       	    	self.request.send(file_information)
       	    	
 	    #Within WWW directory and end in /
@@ -90,10 +87,12 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 	      	self.request.send('Content-Type: text/html\r\n\r\n')
 	      	self.request.send(file_information)
 	    
+	    #Handles without directory without/
 	    else:
-      		self.request.send('HTTP/1.1 404 Not found\r\n')
-      	        self.request.send('Content-Type: plain/text\r\n\r\n')
-	      	    
+		redirect = 'Location: http://127.0.0.1:8080' + base + '/\r\n\r\n'
+      		self.request.send('HTTP/1.1 302 Redirect\r\n')
+      	        self.request.send(redirect)
+      	        
       	else: #os.path.exists(user_path) == False:
       		self.request.send('HTTP/1.1 404 Not found\r\n')
       		self.request.send('Content-Type: plain/text\r\n\r\n')
